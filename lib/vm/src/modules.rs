@@ -56,6 +56,7 @@ impl FileSystemCache {
     pub unsafe fn new<P: Into<PathBuf>>(path: P) -> io::Result<Self> {
         let path: PathBuf = path.into();
         if path.exists() {
+            println!("path exists");
             let metadata = path.metadata()?;
             if metadata.is_dir() {
                 if !metadata.permissions().readonly() {
@@ -79,6 +80,7 @@ impl FileSystemCache {
             }
         } else {
             // Create the directory and any parent directories if they don't yet exist.
+            println!("creating path: {}", path.to_str().unwrap());
             create_dir_all(&path)?;
             Ok(Self { path })
         }

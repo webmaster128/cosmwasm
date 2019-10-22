@@ -21,8 +21,12 @@ impl CosmCache {
     pub unsafe fn new<P: Into<PathBuf>>(base_dir: P) -> Self {
         let base = base_dir.into();
         let wasm_path = base.join(WASM_DIR);
+        println!("creating dir: {}", wasm_path.to_str().unwrap());
         create_dir_all(&wasm_path).unwrap();
-        let modules = FileSystemCache::new(base.join(MODULES_DIR)).unwrap();
+        let mod_path = base.join(MODULES_DIR);
+        println!("creating FileSystemCache: {}", mod_path.to_str().unwrap());
+        let modules = FileSystemCache::new(mod_path).unwrap();
+        println!("made FileSystemCache");
         CosmCache { modules, wasm_path }
     }
 }
