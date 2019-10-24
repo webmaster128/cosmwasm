@@ -19,6 +19,6 @@ maintenance = { status = "actively-developed" }
 members = [ "lib/vm" ]
 
 [dependencies]
-serde_json = { version = "1.0.41" }
+core-serde-json = "0.1.0"
 serde = { version = "1.0.60", default-features = false, features = ["derive"] }
 failure = "0.1.5"
