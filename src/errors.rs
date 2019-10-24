@@ -8,15 +8,15 @@ pub enum Error {
         #[cfg(feature = "backtraces")]
         backtrace: snafu::Backtrace,
     },
-    #[snafu(display("Parse error: {}", source))]
+    #[snafu(display("Parse error"))]
     ParseErr {
-        source: serde_json::error::Error,
+//        source: serde_json::error::Error,
         #[cfg(feature = "backtraces")]
         backtrace: snafu::Backtrace,
     },
-    #[snafu(display("Serialize error: {}", source))]
+    #[snafu(display("Serialize error"))]
     SerializeErr {
-        source: serde_json::error::Error,
+//        source: serde_json::error::Error,
         #[cfg(feature = "backtraces")]
         backtrace: snafu::Backtrace,
     },
