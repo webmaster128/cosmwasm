@@ -1,6 +1,9 @@
-use std::mem;
-use std::os::raw::c_void;
-use std::vec::Vec;
+extern crate alloc;
+
+use core::mem;
+use core::ffi::c_void;
+use alloc::boxed::Box;
+use alloc::vec::Vec;
 
 use crate::errors::{Error, NullPointer};
 
@@ -12,8 +15,8 @@ pub struct Slice {
     pub len: u32,
 }
 
-/// alloc is the same as external allocate, but designed to be called internally
-pub fn alloc(size: usize) -> *mut c_void {
+/// do_allocate is the same as external allocate, but designed to be called internally
+pub fn do_allocate(size: usize) -> *mut c_void {
     // allocate the space in memory
     let buffer = vec![0u8; size];
     release_buffer(buffer)

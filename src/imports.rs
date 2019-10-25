@@ -1,9 +1,11 @@
 #![cfg(target_arch = "wasm32")]
 
-use std::ffi::c_void;
-use std::vec::Vec;
+extern crate alloc;
 
-use crate::memory::{alloc, build_slice, consume_slice, Slice};
+use core::ffi::c_void;
+use alloc::vec::Vec;
+
+use crate::memory::{do_allocate, build_slice, consume_slice, Slice};
 use crate::storage::Storage;
 
 // this is the buffer we pre-allocate in get - we should configure this somehow later
@@ -27,7 +29,7 @@ impl Storage for ExternalStorage {
     fn get(&self, key: &[u8]) -> Option<Vec<u8>> {
         let key = build_slice(key);
         let key_ptr = &*key as *const Slice as *const c_void;
-        let value = alloc(MAX_READ);
+        let value = do_allocate(MAX_READ);
 
         let read = unsafe { c_read(key_ptr, value) };
         if read < 0 {

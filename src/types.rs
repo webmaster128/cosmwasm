@@ -1,3 +1,7 @@
+extern crate alloc;
+
+use alloc::vec::Vec;
+use alloc::string::String;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]

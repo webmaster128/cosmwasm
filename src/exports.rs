@@ -4,14 +4,17 @@
 //! allocate and deallocate should be re-exported as is
 //! do_init and do_wrapper should be wrapped with a extern "C" entry point
 //! including the contract-specific init/handle function pointer.
-use std::fmt::Display;
-use std::os::raw::c_void;
-use std::vec::Vec;
+
+extern crate alloc;
+
+use core::fmt::Display;
+use core::ffi::c_void;
+use alloc::vec::Vec;
 use snafu::ResultExt;
 
 use crate::errors::{Error, ParseErr, SerializeErr};
 use crate::imports::ExternalStorage;
-use crate::memory::{alloc, consume_slice, release_buffer};
+use crate::memory::{do_allocate, consume_slice, release_buffer};
 use crate::serde::{from_slice, to_vec};
 use crate::types::{ContractResult, Params, Response};
 
@@ -20,7 +23,7 @@ use crate::types::{ContractResult, Params, Response};
 // and should be accompanied by a corresponding deallocate
 #[no_mangle]
 pub extern "C" fn allocate(size: usize) -> *mut c_void {
-    alloc(size)
+    do_allocate(size)
 }
 
 // deallocate expects a pointer to a Slice created with allocate.

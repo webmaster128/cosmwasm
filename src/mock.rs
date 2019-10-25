@@ -1,16 +1,19 @@
-use std::collections::HashMap;
+extern crate alloc;
+
+use alloc::collections::BTreeMap;
+use alloc::vec::Vec;
 
 pub use crate::storage::Storage;
 
 #[derive(Clone)]
 pub struct MockStorage {
-    data: HashMap<Vec<u8>, Vec<u8>>,
+    data: BTreeMap<Vec<u8>, Vec<u8>>,
 }
 
 impl MockStorage {
     pub fn new() -> Self {
         MockStorage {
-            data: HashMap::new(),
+            data: BTreeMap::new(),
         }
     }
 }

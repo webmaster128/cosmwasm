@@ -1,4 +1,8 @@
-use snafu::{Snafu};
+extern crate alloc;
+
+use alloc::string::String;
+use snafu_derive::{Snafu};
+
 
 #[derive(Debug, Snafu)]
 #[snafu(visibility = "pub")]
@@ -8,15 +12,17 @@ pub enum Error {
         #[cfg(feature = "backtraces")]
         backtrace: snafu::Backtrace,
     },
-    #[snafu(display("Parse error: {}", source))]
+//    #[snafu(display("Parse error: {}", source))]
+    #[snafu(display("Parse error"))]
     ParseErr {
-        source: serde_json::error::Error,
+//        source: core_serde_json::de::Error,
         #[cfg(feature = "backtraces")]
         backtrace: snafu::Backtrace,
     },
-    #[snafu(display("Serialize error: {}", source))]
+    //    #[snafu(display("Serialization error: {}", source))]
+    #[snafu(display("Serialization error"))]
     SerializeErr {
-        source: serde_json::error::Error,
+//        source: core_serde_json::ser::Error,
         #[cfg(feature = "backtraces")]
         backtrace: snafu::Backtrace,
     },

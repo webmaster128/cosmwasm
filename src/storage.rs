@@ -1,4 +1,6 @@
-use std::vec::Vec;
+extern crate alloc;
+
+use alloc::vec::Vec;
 
 pub trait Storage {
     fn get(&self, key: &[u8]) -> Option<Vec<u8>>;
