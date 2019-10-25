@@ -256,7 +256,7 @@ dependencies = [
 
 [[package]]
 name = "cosmwasm"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "core-serde-json 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "heapless 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -268,7 +268,7 @@ dependencies = [
 name = "cosmwasm-vm"
 version = "0.3.1"
 dependencies = [
- "cosmwasm 0.3.0",
+ "cosmwasm 0.4.0",
  "failure 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "hex 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "lru 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",

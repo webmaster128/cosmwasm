@@ -31,7 +31,9 @@ integration = [ ]
 backtraces = [ "cosmwasm/backtraces" ]
 
 [dependencies]
-cosmwasm = { path = "../..", version = "0.3.0" }
+cosmwasm = { path = "../..", version = "0.4.0" }
+core-serde-json = "0.1.0"
+heapless = "0.5.0"
 serde = { version = "^1.0.80", default-features = false, features = ["alloc", "derive"] }
 snafu = { version = "0.5.0", default-features = false, features = ["rust_1_30"] }
 # needed for wasm-pack build process

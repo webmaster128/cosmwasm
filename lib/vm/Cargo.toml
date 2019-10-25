@@ -12,7 +12,7 @@ circle-ci = { repository = "confio/cosmwasm", branch = "master" }
 maintenance = { status = "actively-developed" }
 
 [dependencies]
-cosmwasm = { path = "../..", version = "0.3.0" }
+cosmwasm = { path = "../..", version = "0.4.0" }
 wasmer-runtime = "0.8.0"
 wasmer-runtime-core = "0.8.0"
 wasmer-clif-backend = "0.8.0"
