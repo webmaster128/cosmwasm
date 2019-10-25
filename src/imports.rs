@@ -1,13 +1,15 @@
 #![cfg(target_arch = "wasm32")]
 
 use std::ffi::c_void;
-use std::vec::Vec;
+use heapless::Vec;
+// set maximum size of input
+use heapless::consts::U2048 as USIZE;
 
 use crate::memory::{alloc, build_slice, consume_slice, Slice};
 use crate::storage::Storage;
 
 // this is the buffer we pre-allocate in get - we should configure this somehow later
-static MAX_READ: usize = 2000;
+static MAX_READ: usize = 2048;
 
 extern "C" {
     fn c_read(key: *const c_void, value: *mut c_void) -> i32;
@@ -24,7 +26,7 @@ impl ExternalStorage {
 }
 
 impl Storage for ExternalStorage {
-    fn get(&self, key: &[u8]) -> Option<Vec<u8>> {
+    fn get(&self, key: &[u8]) -> Option<Vec<u8, USIZE>> {
         let key = build_slice(key);
         let key_ptr = &*key as *const Slice as *const c_void;
         let value = alloc(MAX_READ);

@@ -1,6 +1,9 @@
 use std::mem;
 use std::os::raw::c_void;
-use std::vec::Vec;
+
+use heapless::Vec;
+// set maximum size of input
+use heapless::consts::U2048 as USIZE;
 
 use crate::errors::{Error, NullPointer};
 
@@ -15,14 +18,14 @@ pub struct Slice {
 /// alloc is the same as external allocate, but designed to be called internally
 pub fn alloc(size: usize) -> *mut c_void {
     // allocate the space in memory
-    let buffer = vec![0u8; size];
+    let buffer = Vec::<u8, USIZE>::new();
     release_buffer(buffer)
 }
 
 /// release_buffer is like alloc, but instead of creating a new vector
 /// it consumes an existing one and returns a pointer to the slice
 /// (preventing the memory from being freed until explicitly called later)
-pub fn release_buffer(buffer: Vec<u8>) -> *mut c_void {
+pub fn release_buffer(buffer: Vec<u8, USIZE>) -> *mut c_void {
     let slice = build_slice(&buffer);
     mem::forget(buffer);
     Box::into_raw(slice) as *mut c_void
@@ -31,7 +34,7 @@ pub fn release_buffer(buffer: Vec<u8>) -> *mut c_void {
 /// consume_slice will return the data referenced by the slice and
 /// deallocates the slice (and the vector when finished).
 /// Warning: only use this when you are sure the caller will never use (or free) the slice later
-pub unsafe fn consume_slice(ptr: *mut c_void) -> Result<Vec<u8>, Error> {
+pub unsafe fn consume_slice(ptr: *mut c_void) -> Result<Vec<u8, USIZE>, Error> {
     if ptr.is_null() {
         return NullPointer{}.fail();
     }

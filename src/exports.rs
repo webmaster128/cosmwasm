@@ -6,7 +6,9 @@
 //! including the contract-specific init/handle function pointer.
 use std::fmt::Display;
 use std::os::raw::c_void;
-use std::vec::Vec;
+use heapless::Vec;
+// set maximum size of input
+use heapless::consts::U2048 as USIZE;
 use snafu::ResultExt;
 
 use crate::errors::{Error, ParseErr, SerializeErr};
@@ -33,7 +35,7 @@ pub extern "C" fn deallocate(pointer: *mut c_void) {
 
 // do_init should be wrapped in an external "C" export, containing a contract-specific function as arg
 pub fn do_init<T: Display + From<Error>>(
-    init_fn: &dyn Fn(&mut ExternalStorage, Params, Vec<u8>) -> Result<Response, T>,
+    init_fn: &dyn Fn(&mut ExternalStorage, Params, Vec<u8, USIZE>) -> Result<Response, T>,
     params_ptr: *mut c_void,
     msg_ptr: *mut c_void,
 ) -> *mut c_void {
@@ -45,7 +47,7 @@ pub fn do_init<T: Display + From<Error>>(
 
 // do_handle should be wrapped in an external "C" export, containing a contract-specific function as arg
 pub fn do_handle<T: Display + From<Error>>(
-    handle_fn: &dyn Fn(&mut ExternalStorage, Params, Vec<u8>) -> Result<Response, T>,
+    handle_fn: &dyn Fn(&mut ExternalStorage, Params, Vec<u8, USIZE>) -> Result<Response, T>,
     params_ptr: *mut c_void,
     msg_ptr: *mut c_void,
 ) -> *mut c_void {
@@ -55,12 +57,12 @@ pub fn do_handle<T: Display + From<Error>>(
     }
 }
 fn _do_init<T: Display + From<Error>>(
-    init_fn: &dyn Fn(&mut ExternalStorage, Params, Vec<u8>) -> Result<Response, T>,
+    init_fn: &dyn Fn(&mut ExternalStorage, Params, Vec<u8, USIZE>) -> Result<Response, T>,
     params_ptr: *mut c_void,
     msg_ptr: *mut c_void,
 ) -> Result<*mut c_void, T> {
-    let params: Vec<u8> = unsafe { consume_slice(params_ptr)? };
-    let msg: Vec<u8> = unsafe { consume_slice(msg_ptr)? };
+    let params: Vec<u8, USIZE> = unsafe { consume_slice(params_ptr)? };
+    let msg: Vec<u8, USIZE> = unsafe { consume_slice(msg_ptr)? };
 
     let params: Params = from_slice(&params).context(ParseErr{})?;
     let mut store = ExternalStorage::new();
@@ -70,12 +72,12 @@ fn _do_init<T: Display + From<Error>>(
 }
 
 fn _do_handle<T: Display + From<Error>>(
-    handle_fn: &dyn Fn(&mut ExternalStorage, Params, Vec<u8>) -> Result<Response, T>,
+    handle_fn: &dyn Fn(&mut ExternalStorage, Params, Vec<u8, USIZE>) -> Result<Response, T>,
     params_ptr: *mut c_void,
     msg_ptr: *mut c_void,
 ) -> Result<*mut c_void, T> {
-    let params: Vec<u8> = unsafe { consume_slice(params_ptr)? };
-    let msg: Vec<u8> = unsafe { consume_slice(msg_ptr)? };
+    let params: Vec<u8, USIZE> = unsafe { consume_slice(params_ptr)? };
+    let msg: Vec<u8, USIZE> = unsafe { consume_slice(msg_ptr)? };
 
     let params: Params = from_slice(&params).context(ParseErr{})?;
     let mut store = ExternalStorage::new();
